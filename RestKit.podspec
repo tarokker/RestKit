@@ -40,7 +40,7 @@ EOS
   
   s.subspec 'Network' do |ns|
     ns.header_dir     = 'RestKit/Network'
-    ns.source_files   = 'Code/Network'
+    ns.source_files   = 'Code/Network', 'Vendor/AFNetworking'
     ns.ios.frameworks = 'CFNetwork', 'Security', 'MobileCoreServices', 'SystemConfiguration'
     ns.osx.frameworks = 'CoreServices', 'Security', 'SystemConfiguration'
     ns.dependency       'SOCKit'
