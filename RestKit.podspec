@@ -1,10 +1,10 @@
 Pod::Spec.new do |s|
   s.name         =  'RestKit'
-  s.version      =  '0.20.4'
+  s.version      =  '0.20.5'
   s.summary      =  'RestKit is a framework for consuming and modeling RESTful web resources on iOS and OS X.'
   s.homepage     =  'http://www.restkit.org'
   s.author       =  { 'Blake Watters' => 'blakewatters@gmail.com' }
-  s.source       =  { :git => 'https://github.com/tarokker/RestKitPromoQui.git', :tag => 'v0.20.4' }
+  s.source       =  { :git => 'https://github.com/tarokker/RestKitPromoQui.git', :tag => 'v0.20.5' }
   s.license      =  'Apache License, Version 2.0'
   
   # Platform setup
@@ -40,7 +40,7 @@ EOS
   
   s.subspec 'Network' do |ns|
     ns.header_dir     = 'RestKit/Network'
-    ns.source_files   = 'Code/Network', 'Vendor/AFNetworking'
+    ns.source_files   = 'Code/Network', 'Vendor/AFNetworking/.h', 'Vendor/AFNetworking/.m'
     ns.ios.frameworks = 'CFNetwork', 'Security', 'MobileCoreServices', 'SystemConfiguration'
     ns.osx.frameworks = 'CoreServices', 'Security', 'SystemConfiguration'
     ns.dependency       'SOCKit'
