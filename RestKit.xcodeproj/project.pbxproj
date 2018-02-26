@@ -1121,6 +1121,7 @@
 		25160D44145650490060A5C5 /* Code */ = {
 			isa = PBXGroup;
 			children = (
+				64BB37742044A4CD00927E7E /* AFNetworking */,
 				25160DA1145650490060A5C5 /* RestKit.h */,
 				2502C8E915F79CF70060FD75 /* ObjectMapping.h */,
 				25160D7A145650490060A5C5 /* ObjectMapping */,
@@ -1266,7 +1267,6 @@
 		25160E8D145652E40060A5C5 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				64BB37742044A4CD00927E7E /* AFNetworking */,
 				25C6C0A21716F6F800C98A73 /* TransitionKit */,
 				25160EA01456532C0060A5C5 /* LibComponentLogging */,
 				25160EB71456532C0060A5C5 /* SOCKit */,
