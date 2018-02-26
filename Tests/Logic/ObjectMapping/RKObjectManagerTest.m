@@ -36,10 +36,10 @@
 @implementation RKSubclassedTestModel
 @end
 
-@interface RKTestAFHTTPClient : AFHTTPClient
+@interface RKTestAF_HTTPClient_RestKit : AF_HTTPClient_RestKit
 @end
 
-@implementation RKTestAFHTTPClient
+@implementation RKTestAF_HTTPClient_RestKit
 
 - (NSMutableURLRequest *)requestWithMethod:(NSString *)method
                                       path:(NSString *)path
@@ -165,26 +165,26 @@
     expect(manager.requestSerializationMIMEType).to.equal(RKMIMETypeFormURLEncoded);
 }
 
-- (void)testInitializationWithAFHTTPClientSetsNilAcceptHeaderValue
+- (void)testInitializationWithAF_HTTPClient_RestKitSetsNilAcceptHeaderValue
 {
-    AFHTTPClient *client = [AFHTTPClient clientWithBaseURL:[NSURL URLWithString:@"http://restkit.org"]];
+    AF_HTTPClient_RestKit *client = [AF_HTTPClient_RestKit clientWithBaseURL:[NSURL URLWithString:@"http://restkit.org"]];
     [client setDefaultHeader:@"Accept" value:@"this/that"];
     RKObjectManager *manager = [[RKObjectManager alloc] initWithHTTPClient:client];
     expect([manager defaultHeaders][@"Accept"]).to.equal(@"this/that");
 }
 
-- (void)testDefersToAFHTTPClientParameterEncodingWhenInitializedWithAFHTTPClient
+- (void)testDefersToAF_HTTPClient_RestKitParameterEncodingWhenInitializedWithAF_HTTPClient_RestKit
 {
-    AFHTTPClient *client = [AFHTTPClient clientWithBaseURL:[NSURL URLWithString:@"http://restkit.org"]];
-    client.parameterEncoding = AFJSONParameterEncoding;
+    AF_HTTPClient_RestKit *client = [AF_HTTPClient_RestKit clientWithBaseURL:[NSURL URLWithString:@"http://restkit.org"]];
+    client.parameterEncoding = AF_JSONParameterEncoding_RestKit;
     RKObjectManager *manager = [[RKObjectManager alloc] initWithHTTPClient:client];
     expect([manager requestSerializationMIMEType]).to.equal(RKMIMETypeJSON);
 }
 
 - (void)testDefaultsToFormURLEncodingForUnsupportedParameterEncodings
 {
-    AFHTTPClient *client = [AFHTTPClient clientWithBaseURL:[NSURL URLWithString:@"http://restkit.org"]];
-    client.parameterEncoding = AFPropertyListParameterEncoding;
+    AF_HTTPClient_RestKit *client = [AF_HTTPClient_RestKit clientWithBaseURL:[NSURL URLWithString:@"http://restkit.org"]];
+    client.parameterEncoding = AF_PropertyListParameterEncoding_RestKit;
     RKObjectManager *manager = [[RKObjectManager alloc] initWithHTTPClient:client];
     expect([manager requestSerializationMIMEType]).to.equal(RKMIMETypeFormURLEncoded);
 }
@@ -334,7 +334,7 @@
 {
     self.objectManager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString:@"http://localhost:4567/object_manager/"]];
     RKTestUser *testUser = [RKTestUser new];
-    NSMutableURLRequest *request = [self.objectManager multipartFormRequestWithObject:testUser method:RKRequestMethodPOST path:@"path" parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    NSMutableURLRequest *request = [self.objectManager multipartFormRequestWithObject:testUser method:RKRequestMethodPOST path:@"path" parameters:nil constructingBodyWithBlock:^(id<AF_MultipartFormData_RestKit> formData) {
         [formData appendPartWithFormData:[@"testing" dataUsingEncoding:NSUTF8StringEncoding] name:@"part"];
     }];
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request responseDescriptors:self.objectManager.responseDescriptors];
@@ -499,9 +499,9 @@
     expect(string).to.equal(@"key=value");
 }
 
-- (void)testAFHTTPClientCanModifyRequestsBuiltByObjectManager
+- (void)testAF_HTTPClient_RestKitCanModifyRequestsBuiltByObjectManager
 {
-    RKTestAFHTTPClient *testClient = [[RKTestAFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:@"http://test.com"]];
+    RKTestAF_HTTPClient_RestKit *testClient = [[RKTestAF_HTTPClient_RestKit alloc] initWithBaseURL:[NSURL URLWithString:@"http://test.com"]];
     RKObjectManager *manager = [[RKObjectManager alloc] initWithHTTPClient:testClient];
     RKHuman *temporaryHuman = [RKTestFactory insertManagedObjectForEntityForName:@"Human" inManagedObjectContext:nil withProperties:nil];
     NSURLRequest *request = [manager requestWithObject:temporaryHuman method:RKRequestMethodPATCH path:@"/the/path" parameters:@{@"key": @"value"}];
@@ -681,7 +681,7 @@
 - (void)testChangingHTTPClient
 {
     RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString:@"http://restkit.org"]];
-    manager.HTTPClient = [AFHTTPClient clientWithBaseURL:[NSURL URLWithString:@"http://google.com/"]];
+    manager.HTTPClient = [AF_HTTPClient_RestKit clientWithBaseURL:[NSURL URLWithString:@"http://google.com/"]];
     expect([manager.baseURL absoluteString]).to.equal(@"http://google.com/");
 }
 
@@ -1092,7 +1092,7 @@
     NSString *path = @"/api/upload/";
     
     NSData *blakePng = [RKTestFixture dataWithContentsOfFixture:@"blake.png"];
-    NSMutableURLRequest *request = [objectManager multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:path parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    NSMutableURLRequest *request = [objectManager multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:path parameters:nil constructingBodyWithBlock:^(id<AF_MultipartFormData_RestKit> formData) {
         [formData appendPartWithFileData:blakePng
                                     name:@"file"
                                 fileName:@"blake.png"

@@ -37,7 +37,7 @@ extern NSString * const RKTestFactoryDefaultNamesManagedObjectStore;
 /**
  The `RKTestFactory` class provides an interface for initializing RestKit objects within a unit testing environment. The factory is used to ensure isolation between test cases by ensuring that RestKit's important singleton objects are torn down between tests and that each test is working within a clean Core Data environment. Callback hooks are provided so that application specific set up and tear down logic can be integrated as well.
 
- The factory also provides for the definition of named factories for instantiating objects quickly. At initialization, there are factories defined for creating instances of `AFHTTPClient`, `RKObjectManager`, and `RKManagedObjectStore`. These factories may be redefined within your application should you choose to utilize a subclass or wish to centralize configuration of objects across the test suite. You may also define additional factories for building instances of objects specific to your application using the same infrastructure.
+ The factory also provides for the definition of named factories for instantiating objects quickly. At initialization, there are factories defined for creating instances of `AF_HTTPClient_RestKit`, `RKObjectManager`, and `RKManagedObjectStore`. These factories may be redefined within your application should you choose to utilize a subclass or wish to centralize configuration of objects across the test suite. You may also define additional factories for building instances of objects specific to your application using the same infrastructure.
 
  ## Customizing the Factory
 
@@ -93,7 +93,7 @@ extern NSString * const RKTestFactoryDefaultNamesManagedObjectStore;
 ///------------------------------
 
 /**
- Returns the base URL with which to initialize `AFHTTPClient` and `RKObjectManager` instances created via the factory.
+ Returns the base URL with which to initialize `AF_HTTPClient_RestKit` and `RKObjectManager` instances created via the factory.
 
  @return The base URL for the factory.
  */
@@ -168,7 +168,7 @@ extern NSString * const RKTestFactoryDefaultNamesManagedObjectStore;
 ///--------------------------------
 
 /**
- Fetches the shared `AFHTTPClient` object using the factory defined for the name `RKTestFactoryDefaultNamesClient`.
+ Fetches the shared `AF_HTTPClient_RestKit` object using the factory defined for the name `RKTestFactoryDefaultNamesClient`.
 
  @return The shared client instance.
  */

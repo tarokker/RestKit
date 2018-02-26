@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import "AFHTTPClient.h"
+#import "AF_HTTPClient_RestKit.h"
 #import "RKTestFactory.h"
 #import "RKLog.h"
 #import "RKObjectManager.h"
@@ -106,9 +106,9 @@
 - (void)defineDefaultFactories
 {
     [self defineFactory:RKTestFactoryDefaultNamesClient withBlock:^id {
-        __block AFHTTPClient *client;
+        __block AF_HTTPClient_RestKit *client;
         RKLogSilenceComponentWhileExecutingBlock(RKlcl_cRestKitSupport, ^{
-            client = [AFHTTPClient clientWithBaseURL:self.baseURL];
+            client = [AF_HTTPClient_RestKit clientWithBaseURL:self.baseURL];
         });
 
         return client;

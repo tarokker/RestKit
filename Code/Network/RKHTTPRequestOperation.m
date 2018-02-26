@@ -32,7 +32,7 @@ extern NSString * const RKErrorDomain;
 
 NSString *RKStringFromIndexSet(NSIndexSet *indexSet); // Defined in RKResponseDescriptor.m
 
-@interface AFURLConnectionOperation () <NSURLConnectionDataDelegate>
+@interface AF_URLConnectionOperation_RestKit () <NSURLConnectionDataDelegate>
 @property (readwrite, nonatomic, strong) NSRecursiveLock *lock;
 @end
 
@@ -82,8 +82,8 @@ NSString *RKStringFromIndexSet(NSIndexSet *indexSet); // Defined in RKResponseDe
             NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
             [userInfo setValue:self.responseString forKey:NSLocalizedRecoverySuggestionErrorKey];
             [userInfo setValue:[self.request URL] forKey:NSURLErrorFailingURLErrorKey];
-            [userInfo setValue:self.request forKey:AFNetworkingOperationFailingURLRequestErrorKey];
-            [userInfo setValue:self.response forKey:AFNetworkingOperationFailingURLResponseErrorKey];
+            [userInfo setValue:self.request forKey:AF_Networking_RestKitOperationFailingURLRequestErrorKey];
+            [userInfo setValue:self.response forKey:AF_Networking_RestKitOperationFailingURLResponseErrorKey];
             
             if (![self hasAcceptableStatusCode]) {
                 NSUInteger statusCode = ([self.response isKindOfClass:[NSHTTPURLResponse class]]) ? (NSUInteger)[self.response statusCode] : 200;
@@ -113,7 +113,7 @@ NSString *RKStringFromIndexSet(NSIndexSet *indexSet); // Defined in RKResponseDe
 
 - (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)redirectResponse
 {
-    if ([AFHTTPRequestOperation instancesRespondToSelector:@selector(connection:willSendRequest:redirectResponse:)]) {
+    if ([AF_HTTPRequestOperation_RestKit instancesRespondToSelector:@selector(connection:willSendRequest:redirectResponse:)]) {
         NSURLRequest *returnValue = [super connection:connection willSendRequest:request redirectResponse:redirectResponse];
         if (returnValue) {
             if (redirectResponse) RKLogDebug(@"Following redirect request: %@", returnValue);

@@ -293,22 +293,22 @@ static BOOL RKDoesArrayOfResponseDescriptorsContainMappingForClass(NSArray *resp
     return NO;
 }
 
-static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFHTTPClientParameterEncoding encoding)
+static NSString *RKMIMETypeFromAF_HTTPClient_RestKitParameterEncoding(AF_HTTPClient_RestKitParameterEncoding encoding)
 {
     switch (encoding) {
-        case AFFormURLParameterEncoding:
+        case AF_FormURLParameterEncoding_RestKit:
             return RKMIMETypeFormURLEncoded;
             break;
             
-        case AFJSONParameterEncoding:
+        case AF_JSONParameterEncoding_RestKit:
             return RKMIMETypeJSON;
             break;
             
-        case AFPropertyListParameterEncoding:
+        case AF_PropertyListParameterEncoding_RestKit:
             break;
             
         default:
-            RKLogWarning(@"RestKit is unable to infer the appropriate request serialization MIME Type from an `AFHTTPClientParameterEncoding` value of %d: defaulting to `RKMIMETypeFormURLEncoded`", encoding);
+            RKLogWarning(@"RestKit is unable to infer the appropriate request serialization MIME Type from an `AF_HTTPClient_RestKitParameterEncoding` value of %d: defaulting to `RKMIMETypeFormURLEncoded`", encoding);
             break;
     }
     
@@ -329,7 +329,7 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFHTTPClientParamet
 
 @implementation RKObjectManager
 
-- (id)initWithHTTPClient:(AFHTTPClient *)client
+- (id)initWithHTTPClient:(AF_HTTPClient_RestKit *)client
 {
     self = [super init];
     if (self) {
@@ -342,7 +342,7 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFHTTPClientParamet
         self.registeredHTTPRequestOperationClasses = [NSMutableArray new];
         self.registeredManagedObjectRequestOperationClasses = [NSMutableArray new];
         self.registeredObjectRequestOperationClasses = [NSMutableArray new];
-        self.requestSerializationMIMEType = RKMIMETypeFromAFHTTPClientParameterEncoding(client.parameterEncoding);        
+        self.requestSerializationMIMEType = RKMIMETypeFromAF_HTTPClient_RestKitParameterEncoding(client.parameterEncoding);
 
         // Set shared manager if nil
         if (nil == sharedManager) {
@@ -365,8 +365,8 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFHTTPClientParamet
 
 + (RKObjectManager *)managerWithBaseURL:(NSURL *)baseURL
 {
-    RKObjectManager *manager = [[self alloc] initWithHTTPClient:[AFHTTPClient clientWithBaseURL:baseURL]];
-    [manager.HTTPClient registerHTTPOperationClass:[AFJSONRequestOperation class]];
+    RKObjectManager *manager = [[self alloc] initWithHTTPClient:[AF_HTTPClient_RestKit clientWithBaseURL:baseURL]];
+    [manager.HTTPClient registerHTTPOperationClass:[AF_JSONRequestOperation_RestKit class]];
     [manager setAcceptHeaderWithMIMEType:RKMIMETypeJSON];
     manager.requestSerializationMIMEType = RKMIMETypeFormURLEncoded;
     return manager;
@@ -390,7 +390,7 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFHTTPClientParamet
 #pragma mark - Building Requests
 
 /**
- This method is the `RKObjectManager` analog for the method of the same name on `AFHTTPClient`.
+ This method is the `RKObjectManager` analog for the method of the same name on `AF_HTTPClient_RestKit`.
  */
 - (NSMutableURLRequest *)requestWithMethod:(NSString *)method
                                       path:(NSString *)path
@@ -399,7 +399,7 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFHTTPClientParamet
     NSMutableURLRequest* request;
     if (parameters && !([method isEqualToString:@"GET"] || [method isEqualToString:@"HEAD"] || [method isEqualToString:@"DELETE"])) {
         // NOTE: If the HTTP client has been subclasses, then the developer may be trying to perform signing on the request
-        NSDictionary *parametersForClient = [self.HTTPClient isMemberOfClass:[AFHTTPClient class]] ? nil : parameters;
+        NSDictionary *parametersForClient = [self.HTTPClient isMemberOfClass:[AF_HTTPClient_RestKit class]] ? nil : parameters;
         request = [self.HTTPClient requestWithMethod:method path:path parameters:parametersForClient];
 		
         NSError *error = nil;
@@ -480,7 +480,7 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFHTTPClientParamet
                                                  method:(RKRequestMethod)method
                                                    path:(NSString *)path
                                              parameters:(NSDictionary *)parameters
-                              constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block
+                              constructingBodyWithBlock:(void (^)(id <AF_MultipartFormData_RestKit> formData))block
 {
     NSString *requestPath = (path) ? path : [[self.router URLForObject:object method:method] relativeString];
     id requestParameters = [self mergedParametersWithObject:object method:method parameters:parameters];
@@ -929,13 +929,13 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFHTTPClientParamet
 @end
 
 #ifdef _SYSTEMCONFIGURATION_H
-NSString *RKStringFromNetworkReachabilityStatus(AFNetworkReachabilityStatus networkReachabilityStatus)
+NSString *RKStringFromNetworkReachabilityStatus(AF_NetworkReachabilityStatus_ResKit networkReachabilityStatus)
 {
     switch (networkReachabilityStatus) {
-        case AFNetworkReachabilityStatusNotReachable:     return @"Not Reachable";
-        case AFNetworkReachabilityStatusReachableViaWiFi: return @"Reachable via WiFi";
-        case AFNetworkReachabilityStatusReachableViaWWAN: return @"Reachable via WWAN";
-        case AFNetworkReachabilityStatusUnknown:          return @"Reachability Unknown";
+        case AF_NetworkReachabilityStatusNotReachable_RestKit:     return @"Not Reachable";
+        case AF_NetworkReachabilityStatusReachableViaWiFi_RestKit: return @"Reachable via WiFi";
+        case AF_NetworkReachabilityStatusReachableViaWWAN_RestKit: return @"Reachable via WWAN";
+        case AF_NetworkReachabilityStatusUnknown_RestKit:          return @"Reachability Unknown";
         default:                                          break;
     }
     return nil;

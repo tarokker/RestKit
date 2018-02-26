@@ -22,7 +22,7 @@
 #import "RKRouter.h"
 #import "RKPaginator.h"
 #import "RKMacros.h"
-#import "AFNetworking.h"
+#import "AF_Networking_RestKit.h"
 #import "RKManagedObjectRequestOperation.h"
 
 @protocol RKSerialization;
@@ -38,7 +38,7 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
  
  ## Base URL, Relative Paths and Path Patterns
  
- Each object manager is configured with a base URL that defines the URL that all request sent through the manager will be relative to. The base URL is configured directly through the `managerWithBaseURL:` method or is inherited from an AFNetworking `AFHTTPClient` object if the manager is initialized via the `initWithHTTPClient:` method. The base URL can point directly at the root of a URL or may include a path.
+ Each object manager is configured with a base URL that defines the URL that all request sent through the manager will be relative to. The base URL is configured directly through the `managerWithBaseURL:` method or is inherited from an AFNetworking `AF_HTTPClient_RestKit` object if the manager is initialized via the `initWithHTTPClient:` method. The base URL can point directly at the root of a URL or may include a path.
  
  Many of the methods of the object manager accept a path argument, either directly or in the form of a path pattern. Whenever a path is provided to the object manager directly, as part of a request or response descriptor (see "Request and Response Descriptors"), or via a route (see the "Routing" section), the path is used to construct an `NSURL` object with `[NSURL URLWithString:relativeToURL:]`. The rules for the evaluation of a relative URL can at times be surprising and many configuration errors result from incorrectly configuring the `baseURL` and relative paths thereof. For reference, here are some examples borrowed from the AFNetworking documentation detailing how base URL's and relative paths interact:
  
@@ -163,7 +163,7 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
  
  Routing is the process of generating an `NSURL` appropriate for a particular HTTP server request interaction. Using routing instead of hard-coding paths enables centralization of configuration and allows the developer to focus on what they want done rather than the details of how to do it. Changes to the URL structure in the application can be made in one place. Routes can also be useful in testing, as they permit for the changing of paths at run-time.
  
- Routing interfaces are provided by the `RKRouter` class. Each object manager is in initialized with an `RKRouter` object with a baseURL equal to the baseURL of the underlying `AFHTTPClient` object. Each `RKRouter` instance maintains an `RKRouteSet` object that manages a collection of `RKRoute` objects. Routes are defined in terms of a path pattern.
+ Routing interfaces are provided by the `RKRouter` class. Each object manager is in initialized with an `RKRouter` object with a baseURL equal to the baseURL of the underlying `AF_HTTPClient_RestKit` object. Each `RKRouter` instance maintains an `RKRouteSet` object that manages a collection of `RKRoute` objects. Routes are defined in terms of a path pattern.
  
  There are three types of routes currently supported:
  
@@ -227,11 +227,11 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
  * `appropriateObjectRequestOperationWithObject:method:path:parameters:` - Used to construct all object request operations for the manager, both managed and unmanaged. Invokes either `objectRequestOperationWithRequest:success:failure:` or `managedObjectRequestOperationWithRequest:managedObjectContext:success:failure:` to construct the actual request. Provide a subclass implementation to alter behaviors for all object request operations constructed by the manager.
  * `enqueueObjectRequestOperation:` - Invoked to enqueue all operations constructed by the manager that are to be started as soon as possible. Provide a subclass implementation if you wish to work with object request operations as they are be enqueued.
  
- If you wish to more specifically customize the behavior of the lower level HTTP details, you have several options. All HTTP requests made by the `RKObjectManager` class are made with an instance of the `RKHTTPRequestOperation` class, which is a subclass of the `AFHTTPRequestOperation` class from AFNetworking. This operation class implements the `NSURLConnectionDelegate` and `NSURLConnectionDataDelegate` protocols and as such, has full access to all details of the HTTP request/response cycle exposed by `NSURLConnection`. You can provide the object manager with your own custom subclass of `RKHTTPRequestOperation` to the manager via the `setHTTPOperationClass:` method and all HTTP requests made through the manager will pass through your operation.
+ If you wish to more specifically customize the behavior of the lower level HTTP details, you have several options. All HTTP requests made by the `RKObjectManager` class are made with an instance of the `RKHTTPRequestOperation` class, which is a subclass of the `AF_HTTPRequestOperation_RestKit` class from AFNetworking. This operation class implements the `NSURLConnectionDelegate` and `NSURLConnectionDataDelegate` protocols and as such, has full access to all details of the HTTP request/response cycle exposed by `NSURLConnection`. You can provide the object manager with your own custom subclass of `RKHTTPRequestOperation` to the manager via the `setHTTPOperationClass:` method and all HTTP requests made through the manager will pass through your operation.
 
- You can also customize the HTTP details at the AFNetworking level by subclassing `AFHTTPClient` and using an instance of your subclassed client to initialize the manager.
+ You can also customize the HTTP details at the AFNetworking level by subclassing `AF_HTTPClient_RestKit` and using an instance of your subclassed client to initialize the manager.
  
- @warning Note that when subclassing `AFHTTPClient` to change object manager behaviors it is not possible to alter the paramters of requests that are constructed on behalf of the manager. This is because the object manager handles its own serialization and construction of the request body, but defers to the `AFHTTPClient` for all other details (such as default HTTP headers, etc).
+ @warning Note that when subclassing `AF_HTTPClient_RestKit` to change object manager behaviors it is not possible to alter the paramters of requests that are constructed on behalf of the manager. This is because the object manager handles its own serialization and construction of the request body, but defers to the `AF_HTTPClient_RestKit` for all other details (such as default HTTP headers, etc).
  
  @see `RKObjectRequestOperation`
  @see `RKRouter`
@@ -263,12 +263,12 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
 ///-------------------------------------
 
 /**
- Creates and returns a new `RKObjectManager` object initialized with a new `AFHTTPClient` object that was in turn initialized with the given base URL. The RestKit defaults are applied to the object manager.
+ Creates and returns a new `RKObjectManager` object initialized with a new `AF_HTTPClient_RestKit` object that was in turn initialized with the given base URL. The RestKit defaults are applied to the object manager.
  
- When initialized with a base URL, the returned object manager will have a `requestSerializationMIMEType` with the value of `RKMIMETypeFormURLEncoded` and the underlying `HTTPClient` will have a default value for the 'Accept' header set to `RKMIMETypeJSON`, and the `AFJSONRequestOperation` class will be registered.
+ When initialized with a base URL, the returned object manager will have a `requestSerializationMIMEType` with the value of `RKMIMETypeFormURLEncoded` and the underlying `HTTPClient` will have a default value for the 'Accept' header set to `RKMIMETypeJSON`, and the `AF_JSONRequestOperation_RestKit` class will be registered.
  
- @param baseURL The base URL with which to initialize the `AFHTTPClient` object
- @return A new `RKObjectManager` initialized with an `AFHTTPClient` that was initialized with the given baseURL.
+ @param baseURL The base URL with which to initialize the `AF_HTTPClient_RestKit` object
+ @return A new `RKObjectManager` initialized with an `AF_HTTPClient_RestKit` that was initialized with the given baseURL.
  */
 + (instancetype)managerWithBaseURL:(NSURL *)baseURL;
 
@@ -280,7 +280,7 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
  @param client The AFNetworking HTTP client with which to initialize the receiver.
  @return The receiver, initialized with the given client.
  */
-- (id)initWithHTTPClient:(AFHTTPClient *)client;
+- (id)initWithHTTPClient:(AF_HTTPClient_RestKit *)client;
 
 ///------------------------------------------
 /// @name Accessing Object Manager Properties
@@ -289,7 +289,7 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
 /**
  The AFNetworking HTTP client with which the receiver makes requests.
  */
-@property (nonatomic, strong, readwrite) AFHTTPClient *HTTPClient;
+@property (nonatomic, strong, readwrite) AF_HTTPClient_RestKit *HTTPClient;
 
 /**
  The base URL of the underlying HTTP client.
@@ -299,7 +299,7 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
 /**
  The default HTTP headers for all `NSURLRequest` objects constructed by the object manager.
  
- The returned dictionary contains all of the default headers set on the underlying `AFHTTPClient` object and the value of the 'Accept' header set on the object manager, if any.
+ The returned dictionary contains all of the default headers set on the underlying `AF_HTTPClient_RestKit` object and the value of the 'Accept' header set on the object manager, if any.
  
  @see `setAcceptHeaderWithMIMEType:`
  */
@@ -329,7 +329,7 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
 
  The value given for the `requestSerializationMIMEType` must correspond to a MIME Type registered via `[RKMIMETypeSerialization registerClass:forMIMEType:]`. Implementations are provided by default for `RKMIMETypeFormURLEncoded` and `RKMIMETypeJSON`.
 
- **Default**: `RKMIMETypeFormURLEncoded` or the value of the parameter encoding for the underlying `AFHTTPClient`.
+ **Default**: `RKMIMETypeFormURLEncoded` or the value of the parameter encoding for the underlying `AF_HTTPClient_RestKit`.
  */
 @property (nonatomic, strong) NSString *requestSerializationMIMEType;
 
@@ -372,22 +372,22 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
 /**
  Creates an `NSMutableURLRequest` object with the specified HTTP method and path, and constructs a `multipart/form-data` HTTP body, using the specified parameters and multipart form data block. See http://www.w3.org/TR/html4/interact/forms.html#h-17.13.4.2
  
- This method wraps the underlying `AFHTTPClient` method `multipartFormRequestWithMethod:path:parameters:constructingBodyWithBlock` and adds routing and object parameterization.
+ This method wraps the underlying `AF_HTTPClient_RestKit` method `multipartFormRequestWithMethod:path:parameters:constructingBodyWithBlock` and adds routing and object parameterization.
  
  @param object The object with which to construct the request. For the `POST`, `PUT`, and `PATCH` request methods, the object will parameterized using the `RKRequestDescriptor` for the object.
  @param method The HTTP method for the request, such as `GET`, `POST`, `PUT`, or `DELETE`.
  @param path The path to be appended to the HTTP client's base URL and used as the request URL. If nil, the router is consulted.
  @param parameters The parameters to be either set as a query string for `GET` requests, or reverse merged with the parameterization of the object and set as the request HTTP body.
- @param block A block that takes a single argument and appends data to the HTTP body. The block argument is an object adopting the `AFMultipartFormData` protocol. This can be used to upload files, encode HTTP body as JSON or XML, or specify multiple values for the same parameter, as one might for array values.
+ @param block A block that takes a single argument and appends data to the HTTP body. The block argument is an object adopting the `AF_MultipartFormData_RestKit` protocol. This can be used to upload files, encode HTTP body as JSON or XML, or specify multiple values for the same parameter, as one might for array values.
  @return An `NSMutableURLRequest` object.
  @warning An exception will be raised if the specified method is not `POST`, `PUT` or `DELETE`.
- @see [AFHTTPClient multipartFormRequestWithMethod:path:parameters:constructingBodyWithBlock]
+ @see [AF_HTTPClient_RestKit multipartFormRequestWithMethod:path:parameters:constructingBodyWithBlock]
  */
 - (NSMutableURLRequest *)multipartFormRequestWithObject:(id)object
                                                  method:(RKRequestMethod)method
                                                    path:(NSString *)path
                                              parameters:(NSDictionary *)parameters
-                              constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block;
+                              constructingBodyWithBlock:(void (^)(id <AF_MultipartFormData_RestKit> formData))block;
 
 /**
  Creates an `NSMutableURLRequest` object with the `NSURL` returned by the router for the given route name and object and the given parameters.
@@ -870,5 +870,5 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
  @param networkReachabilityStatus The network reachability status.
  @return A string describing the reachability status.
  */
-NSString *RKStringFromNetworkReachabilityStatus(AFNetworkReachabilityStatus networkReachabilityStatus);
+NSString *RKStringFromNetworkReachabilityStatus(AF_NetworkReachabilityStatus_ResKit networkReachabilityStatus);
 #endif

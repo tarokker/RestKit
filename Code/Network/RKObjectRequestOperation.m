@@ -31,7 +31,7 @@
 #import <Availability.h>
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
-#import "AFNetworkActivityIndicatorManager.h"
+#import "AF_NetworkActivityIndicatorManager_RestKit.h"
 #endif
 
 // Set Logging Component
@@ -132,11 +132,11 @@ static NSString *RKStringDescribingStream(NSStream *stream)
                                                    object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(HTTPOperationDidStart:)
-                                                     name:AFNetworkingOperationDidStartNotification
+                                                     name:AF_Networking_RestKitOperationDidStartNotification
                                                    object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(HTTPOperationDidFinish:)
-                                                     name:AFNetworkingOperationDidFinishNotification
+                                                     name:AF_Networking_RestKitOperationDidFinishNotification
                                                    object:nil];
     }
     
@@ -163,7 +163,7 @@ static void *RKOperationFinishDate = &RKOperationFinishDate;
 - (void)HTTPOperationDidStart:(NSNotification *)notification
 {
     RKHTTPRequestOperation *operation = [notification object];    
-    if (![operation isKindOfClass:[AFHTTPRequestOperation class]]) return;
+    if (![operation isKindOfClass:[AF_HTTPRequestOperation_RestKit class]]) return;
     
     objc_setAssociatedObject(operation, RKOperationStartDate, [NSDate date], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
@@ -184,7 +184,7 @@ static void *RKOperationFinishDate = &RKOperationFinishDate;
 - (void)HTTPOperationDidFinish:(NSNotification *)notification
 {
     RKHTTPRequestOperation *operation = [notification object];    
-    if (![operation isKindOfClass:[AFHTTPRequestOperation class]]) return;
+    if (![operation isKindOfClass:[AF_HTTPRequestOperation_RestKit class]]) return;
     
     // NOTE: if we have a parent object request operation, we'll wait it to finish to emit the logging info
     RKObjectRequestOperation *parentOperation = objc_getAssociatedObject(operation, RKParentObjectRequestOperation);
@@ -265,14 +265,14 @@ NSString *const RKObjectRequestOperationMappingDidFinishUserInfoKey = @"mappingF
 static void RKIncrementNetworkActivityIndicator()
 {
     #if __IPHONE_OS_VERSION_MIN_REQUIRED
-        [[AFNetworkActivityIndicatorManager sharedManager] incrementActivityCount];
+        [[AF_NetworkActivityIndicatorManager_RestKit sharedManager] incrementActivityCount];
     #endif
 }
 
 static void RKDecrementNetworkAcitivityIndicator()
 {
     #if __IPHONE_OS_VERSION_MIN_REQUIRED
-        [[AFNetworkActivityIndicatorManager sharedManager] decrementActivityCount];
+        [[AF_NetworkActivityIndicatorManager_RestKit sharedManager] decrementActivityCount];
     #endif
 }
 
@@ -532,7 +532,7 @@ static NSString *RKStringDescribingURLResponseWithData(NSURLResponse *response, 
 {
     __weak __typeof(&*self)weakSelf = self;    
     
-    [self.HTTPRequestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.HTTPRequestOperation setCompletionBlockWithSuccess:^(AF_HTTPRequestOperation_RestKit *operation, id responseObject) {
         if (weakSelf.isCancelled) {
             [weakSelf.stateMachine finish];
             return;
@@ -572,7 +572,7 @@ static NSString *RKStringDescribingURLResponseWithData(NSURLResponse *response, 
             weakSelf.mappingDidFinishDate = [NSDate date];
             [weakSelf.stateMachine finish];
         }];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(AF_HTTPRequestOperation_RestKit *operation, NSError *error) {
         RKLogError(@"Object request failed: Underlying HTTP request operation failed with error: %@", weakSelf.HTTPRequestOperation.error);
         weakSelf.error = weakSelf.HTTPRequestOperation.error;
         [weakSelf.stateMachine finish];
