@@ -37,7 +37,7 @@
 static char kAF_ImageRequestOperation_RestKitObjectKey;
 
 @interface UIImageView (_AF_Networking_RestKit)
-@property (readwrite, nonatomic, strong, setter = af_setImageRequestOperation:) AF_ImageRequestOperation_RestKit *af_imageRequestOperation;
+@property (readwrite, nonatomic, strong, setter = af_setImageRequestOperation_restKit:) AF_ImageRequestOperation_RestKit *af_imageRequestOperation;
 @end
 
 @implementation UIImageView (_AF_Networking_RestKit)
@@ -52,7 +52,7 @@ static char kAF_ImageRequestOperation_RestKitObjectKey;
     return (AF_HTTPRequestOperation_RestKit *)objc_getAssociatedObject(self, &kAF_ImageRequestOperation_RestKitObjectKey);
 }
 
-- (void)af_setImageRequestOperation:(AF_ImageRequestOperation_RestKit *)imageRequestOperation {
+- (void)af_setImageRequestOperation_restKit:(AF_ImageRequestOperation_RestKit *)imageRequestOperation {
     objc_setAssociatedObject(self, &kAF_ImageRequestOperation_RestKitObjectKey, imageRequestOperation, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 

@@ -33,7 +33,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wstrict-selector-match"
 
-NSSet * AFContentTypesFromHTTPHeader(NSString *string) {
+NSSet * AF_ContentTypesFromHTTPHeader_RestKit(NSString *string) {
     if (!string) {
         return nil;
     }
@@ -319,7 +319,7 @@ static void AF_SwizzleClassMethodWithClassAndSelectorUsingBlock_RestKit(Class kl
         return YES;
     }
 
-    return [[self acceptableContentTypes] intersectsSet:AFContentTypesFromHTTPHeader([request valueForHTTPHeaderField:@"Accept"])];
+    return [[self acceptableContentTypes] intersectsSet:AF_ContentTypesFromHTTPHeader_RestKit([request valueForHTTPHeaderField:@"Accept"])];
 }
 
 @end

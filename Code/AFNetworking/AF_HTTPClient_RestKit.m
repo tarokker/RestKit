@@ -43,13 +43,13 @@
 NSString * const AF_Networking_RestKitReachabilityDidChangeNotification = @"com.alamofire.restkit.networking.reachability.change";
 NSString * const AF_Networking_RestKitReachabilityNotificationStatusItem = @"AF_Networking_RestKitReachabilityNotificationStatusItem";
 
-typedef SCNetworkReachabilityRef AFNetworkReachabilityRef;
+typedef SCNetworkReachabilityRef AF_NetworkReachabilityRef_RestKit;
 typedef void (^AF_NetworkReachabilityStatus_ResKitBlock)(AF_NetworkReachabilityStatus_ResKit status);
 #else
-typedef id AFNetworkReachabilityRef;
+typedef id AF_NetworkReachabilityRef_RestKit;
 #endif
 
-typedef void (^AFCompletionBlock)(void);
+typedef void (^AF_CompletionBlock_RestKit)(void);
 
 static NSString * AF_Base64EncodedStringFromString_RestKit(NSString *string) {
     NSData *data = [NSData dataWithBytes:[string UTF8String] length:[string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]];
@@ -193,7 +193,7 @@ NSArray * AF_QueryStringPair_RestKitsFromKeyAndValue(NSString *key, id value) {
 @property (readwrite, nonatomic, strong) NSURLCredential *defaultCredential;
 @property (readwrite, nonatomic, strong) NSOperationQueue *operationQueue;
 #ifdef _SYSTEMCONFIGURATION_H
-@property (readwrite, nonatomic, assign) AFNetworkReachabilityRef networkReachability;
+@property (readwrite, nonatomic, assign) AF_NetworkReachabilityRef_RestKit networkReachability;
 @property (readwrite, nonatomic, assign) AF_NetworkReachabilityStatus_ResKit networkReachabilityStatus;
 @property (readwrite, nonatomic, copy) AF_NetworkReachabilityStatus_ResKitBlock networkReachabilityStatusBlock;
 #endif
@@ -630,7 +630,7 @@ static void AF_NetworkReachabilityReleaseCallback_ResKit(const void *info) {
     }];
 
     for (AF_HTTPRequestOperation_RestKit *operation in operations) {
-        AFCompletionBlock originalCompletionBlock = [operation.completionBlock copy];
+        AF_CompletionBlock_RestKit originalCompletionBlock = [operation.completionBlock copy];
         __weak __typeof(&*operation)weakOperation = operation;
         operation.completionBlock = ^{
             __strong __typeof(&*weakOperation)strongOperation = weakOperation;

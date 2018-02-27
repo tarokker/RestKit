@@ -36,14 +36,14 @@ typedef enum {
     AF_OperationReadyState_RestKit       = 1,
     AF_OperationExecutingState_RestKit   = 2,
     AF_OperationFinishedState_RestKit    = 3,
-} _AFOperationState;
+} _AF_OperationState_RestKit;
 
-typedef signed short AFOperationState;
+typedef signed short AF_OperationState_RestKit;
 
 #if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
-typedef UIBackgroundTaskIdentifier AFBackgroundTaskIdentifier;
+typedef UIBackgroundTaskIdentifier AF_BackgroundTaskIdentifier_RestKit;
 #else
-typedef id AFBackgroundTaskIdentifier;
+typedef id AF_BackgroundTaskIdentifier_RestKit;
 #endif
 
 static NSString * const kAF_Networking_RestKitLockName = @"com.alamofire.restkit.networking.operation.lock";
@@ -60,7 +60,7 @@ typedef void (^AF_URLConnectionOperation_RestKitAuthenticationChallengeBlock)(NS
 typedef NSCachedURLResponse * (^AF_URLConnectionOperation_RestKitCacheResponseBlock)(NSURLConnection *connection, NSCachedURLResponse *cachedResponse);
 typedef NSURLRequest * (^AF_URLConnectionOperation_RestKitRedirectResponseBlock)(NSURLConnection *connection, NSURLRequest *request, NSURLResponse *redirectResponse);
 
-static inline NSString * AF_KeyPathFromOperationState_RestKit(AFOperationState state) {
+static inline NSString * AF_KeyPathFromOperationState_RestKit(AF_OperationState_RestKit state) {
     switch (state) {
         case AF_OperationReadyState_RestKit:
             return @"isReady";
@@ -75,7 +75,7 @@ static inline NSString * AF_KeyPathFromOperationState_RestKit(AFOperationState s
     }
 }
 
-static inline BOOL AF_StateTransitionIsValid_RestKit(AFOperationState fromState, AFOperationState toState, BOOL isCancelled) {
+static inline BOOL AF_StateTransitionIsValid_RestKit(AF_OperationState_RestKit fromState, AF_OperationState_RestKit toState, BOOL isCancelled) {
     switch (fromState) {
         case AF_OperationReadyState_RestKit:
             switch (toState) {
@@ -130,7 +130,7 @@ static BOOL AF_SecKeyIsEqualToKey_RestKit(SecKeyRef key1, SecKeyRef key2) {
 }
 
 @interface AF_URLConnectionOperation_RestKit ()
-@property (readwrite, nonatomic, assign) AFOperationState state;
+@property (readwrite, nonatomic, assign) AF_OperationState_RestKit state;
 @property (readwrite, nonatomic, assign, getter = isCancelled) BOOL cancelled;
 @property (readwrite, nonatomic, strong) NSRecursiveLock *lock;
 @property (readwrite, nonatomic, strong) NSURLConnection *connection;
@@ -141,7 +141,7 @@ static BOOL AF_SecKeyIsEqualToKey_RestKit(SecKeyRef key1, SecKeyRef key2) {
 @property (readwrite, nonatomic, copy) NSString *responseString;
 @property (readwrite, nonatomic, assign) NSStringEncoding responseStringEncoding;
 @property (readwrite, nonatomic, assign) long long totalBytesRead;
-@property (readwrite, nonatomic, assign) AFBackgroundTaskIdentifier backgroundTaskIdentifier;
+@property (readwrite, nonatomic, assign) AF_BackgroundTaskIdentifier_RestKit backgroundTaskIdentifier;
 @property (readwrite, nonatomic, copy) AF_URLConnectionOperation_RestKitProgressBlock uploadProgress;
 @property (readwrite, nonatomic, copy) AF_URLConnectionOperation_RestKitProgressBlock downloadProgress;
 @property (readwrite, nonatomic, copy) AF_URLConnectionOperation_RestKitAuthenticationChallengeBlock authenticationChallenge;
@@ -403,7 +403,7 @@ static BOOL AF_SecKeyIsEqualToKey_RestKit(SecKeyRef key1, SecKeyRef key2) {
     self.redirectResponse = block;
 }
 
-- (void)setState:(AFOperationState)state {
+- (void)setState:(AF_OperationState_RestKit)state {
     if (!AF_StateTransitionIsValid_RestKit(self.state, state, [self isCancelled])) {
         return;
     }
@@ -810,7 +810,7 @@ didReceiveResponse:(NSURLResponse *)response
         return nil;
     }
     
-    self.state = (AFOperationState)[aDecoder decodeIntegerForKey:@"state"];
+    self.state = (AF_OperationState_RestKit)[aDecoder decodeIntegerForKey:@"state"];
     self.cancelled = [aDecoder decodeBoolForKey:@"isCancelled"];
     self.response = [aDecoder decodeObjectForKey:@"response"];
     self.error = [aDecoder decodeObjectForKey:@"error"];

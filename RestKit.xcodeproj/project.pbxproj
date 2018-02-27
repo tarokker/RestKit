@@ -1634,24 +1634,24 @@
 			isa = PBXGroup;
 			children = (
 				64BB37752044A4CD00927E7E /* AF_HTTPClient_RestKit.m */,
+				64BB37802044A4CD00927E7E /* AF_HTTPClient_RestKit.h */,
+				64BB377F2044A4CD00927E7E /* AF_ImageRequestOperation_RestKit.m */,
 				64BB37762044A4CD00927E7E /* AF_ImageRequestOperation_RestKit.h */,
+				64BB37822044A4CD00927E7E /* UIImageView+AF_Networking_RestKit.h */,
 				64BB37772044A4CD00927E7E /* UIImageView+AF_Networking_RestKit.m */,
 				64BB37782044A4CD00927E7E /* AF_XMLRequestOperation_RestKit.m */,
+				64BB37812044A4CD00927E7E /* AF_XMLRequestOperation_RestKit.h */,
 				64BB37792044A4CD00927E7E /* AF_JSONRequestOperation_RestKit.h */,
+				64BB37842044A4CD00927E7E /* AF_JSONRequestOperation_RestKit.m */,
 				64BB377A2044A4CD00927E7E /* AF_HTTPRequestOperation_RestKit.h */,
+				64BB37832044A4CD00927E7E /* AF_HTTPRequestOperation_RestKit.m */,
 				64BB377B2044A4CD00927E7E /* AF_NetworkActivityIndicatorManager_RestKit.h */,
+				64BB37872044A4CD00927E7E /* AF_NetworkActivityIndicatorManager_RestKit.m */,
 				64BB377C2044A4CD00927E7E /* AF_Networking_RestKit.h */,
 				64BB377D2044A4CD00927E7E /* AF_PropertyListRequestOperation_RestKit.m */,
-				64BB377E2044A4CD00927E7E /* AF_URLConnectionOperation_RestKit.h */,
-				64BB377F2044A4CD00927E7E /* AF_ImageRequestOperation_RestKit.m */,
-				64BB37802044A4CD00927E7E /* AF_HTTPClient_RestKit.h */,
-				64BB37812044A4CD00927E7E /* AF_XMLRequestOperation_RestKit.h */,
-				64BB37822044A4CD00927E7E /* UIImageView+AF_Networking_RestKit.h */,
-				64BB37832044A4CD00927E7E /* AF_HTTPRequestOperation_RestKit.m */,
-				64BB37842044A4CD00927E7E /* AF_JSONRequestOperation_RestKit.m */,
-				64BB37852044A4CD00927E7E /* AF_URLConnectionOperation_RestKit.m */,
 				64BB37862044A4CD00927E7E /* AF_PropertyListRequestOperation_RestKit.h */,
-				64BB37872044A4CD00927E7E /* AF_NetworkActivityIndicatorManager_RestKit.m */,
+				64BB377E2044A4CD00927E7E /* AF_URLConnectionOperation_RestKit.h */,
+				64BB37852044A4CD00927E7E /* AF_URLConnectionOperation_RestKit.m */,
 			);
 			path = AFNetworking;
 			sourceTree = "<group>";
